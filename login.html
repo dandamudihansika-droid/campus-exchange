@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Campus Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="white">CAMPUS</span>
+      <span class="green">EXCHANGE</span>
+    </div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="signup.html">Sign Up</a>
+    </nav>
+  </header>
+
+  <!-- LOGIN SECTION -->
+  <section class="form-container">
+    <h1>
+      SIGN <span class="green">IN</span>
+    </h1>
+    <p class="subtitle">
+      Access your Campus Exchange account
+    </p>
+
+    <form class="auth-form" onsubmit="loginUser(event)">
+      <input type="email" placeholder="Email address" required>
+      <input type="password" placeholder="Password" required>
+
+      <button type="submit" class="primary-btn full-width">
+        SIGN IN
+      </button>
+    </form>
+
+    <p class="switch-text">
+      Don’t have an account?
+      <a href="signup.html">Sign Up</a>
+    </p>
+  </section>
+
+  <!-- API -->
+  <script src="js/api.js"></script>
+
+  <script>
+    const loginForm = document.querySelector('.auth-form');
+
+    loginForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      
+      try {
+        // Show loading state
+        submitBtn.textContent = 'Signing in...';
+        submitBtn.disabled = true;
+
+        // Create FormData
+        const formData = new FormData(loginForm);
+        
+        // Validate form
+        const validation = CampusExchangeAPI.validateAuthForm(formData, true);
+        if (!validation.isValid) {
+          alert('Please fix the following errors:\n' + Object.values(validation.errors).join('\n'));
+          return;
+        }
+
+        // Prepare credentials
+        const credentials = {
+          email: formData.get('email'),
+          password: formData.get('password')
+        };
+
+        // Login to API
+        const result = await CampusExchangeAPI.authAPI.login(credentials);
+
+        alert("Login successful!");
+        window.location.href = "categories.html";
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed: ' + error.message);
+      } finally {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

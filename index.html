@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/icons/favicon.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="white">CAMPUS</span>
+      <span class="green">EXCHANGE</span>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div style="flex:1; display:flex; justify-content:center;">
+      <input
+        type="text"
+        id="navSearch"
+        placeholder="Search items..."
+        style="
+          width: 220px;
+          padding: 6px 10px;
+          border-radius: 6px;
+          border: none;
+          outline: none;
+          font-size: 13px;
+        "
+        onkeypress="handleSearch(event)"
+      />
+    </div>
+
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="categories.html">Categories</a>
+      <a href="sell.html">Sell Item</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>
+        EXCHANGE WITH YOUR <br>
+        <span class="green">CAMPUS COMMUNITY</span>
+      </h1>
+
+      <p>
+        A trusted student-to-student platform to buy, sell, exchange,
+        or give away items safely within your campus.
+      </p>
+
+      <div class="hero-buttons">
+        <button class="primary-btn" onclick="goToCategories()">
+          BROWSE ITEMS →
+        </button>
+
+        <button class="secondary-btn" onclick="goToSell()">
+          SELL AN ITEM
+        </button>
+      </div>
+
+      <!-- FEATURES -->
+      <div class="features">
+        <div class="feature">🎓 Campus Verified</div>
+        <div class="feature">🔒 Safe Exchange</div>
+        <div class="feature">🔁 Buy • Sell • Give Away</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Campus Exchange. All rights reserved.</p>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    function goToCategories() {
+      window.location.href = "categories.html";
+    }
+
+    function goToSell() {
+      window.location.href = "sell.html";
+    }
+
+    function handleSearch(e) {
+      if (e.key === "Enter") {
+        const value = document.getElementById("navSearch").value.trim();
+        if (value !== "") {
+          window.location.href = "items.html?search=" + encodeURIComponent(value);
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

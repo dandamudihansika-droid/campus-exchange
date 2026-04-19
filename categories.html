@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Categories | Campus Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="white">CAMPUS</span>
+      <span class="green">EXCHANGE</span>
+    </a>
+
+    <nav>
+      <a href="categories.html" class="active">Categories</a>
+      <a href="sell.html">Sell Item</a>
+
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- CATEGORIES SECTION -->
+  <section class="categories-section">
+    <h1>BROWSE <span class="green">CATEGORIES</span></h1>
+    <p class="subtitle">Select a category to explore available items</p>
+    <p class="hint">All exchanges are limited to campus students only</p>
+
+    <div class="category-grid">
+
+      <div class="category-card electronics" onclick="openCategory('electronics')" tabindex="0" role="button">
+        <div class="overlay">
+          <h3>Electronics</h3>
+          <p>Phones, laptops, accessories</p>
+        </div>
+      </div>
+
+      <div class="category-card books" onclick="openCategory('books')" tabindex="0" role="button">
+        <div class="overlay">
+          <h3>Books</h3>
+          <p>Textbooks, novels, study materials</p>
+        </div>
+      </div>
+
+      <div class="category-card furniture" onclick="openCategory('furniture')" tabindex="0" role="button">
+        <div class="overlay">
+          <h3>Furniture</h3>
+          <p>Chairs, desks, storage</p>
+        </div>
+      </div>
+
+      <div class="category-card accessories" onclick="openCategory('accessories')" tabindex="0" role="button">
+        <div class="overlay">
+          <h3>Accessories</h3>
+          <p>Watches, bags, jewelry</p>
+        </div>
+      </div>
+
+      <div class="category-card daily" onclick="openCategory('daily')" tabindex="0" role="button">
+        <div class="overlay">
+          <h3>Daily Essentials</h3>
+          <p>Kitchen, bathroom, daily use</p>
+        </div>
+      </div>
+
+      <div class="category-card others" onclick="openCategory('others')" tabindex="0" role="button">
+        <div class="overlay">
+          <h3>Others</h3>
+          <p>Everything else</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Campus Exchange. All rights reserved.</p>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    function openCategory(category) {
+      window.location.href = "items.html?category=" + category;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Items | Campus Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    .items-section {
+      padding: 60px;
+    }
+
+    .search-box {
+      max-width: 400px;
+      margin: 20px auto;
+      display: flex;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .item-card {
+      background: #0f1411;
+      border: 1px solid #1c1c1c;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .item-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 20px rgba(0,255,102,0.3);
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #111;
+    }
+
+    .item-card h3 {
+      color: #00ff66;
+      margin: 10px 0 5px;
+      font-size: 16px;
+    }
+
+    .item-card p {
+      font-size: 14px;
+      color: #bfbfbf;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="white">CAMPUS</span>
+      <span class="green">EXCHANGE</span>
+    </a>
+
+    <nav>
+      <a href="categories.html">Categories</a>
+      <a href="sell.html">Sell Item</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- ITEMS SECTION -->
+  <section class="items-section">
+    <h1 style="text-align:center;">
+      AVAILABLE <span class="green">ITEMS</span>
+    </h1>
+
+    <!-- SEARCH BAR -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search items..." />
+    </div>
+
+    <div class="items-grid" id="grid"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Campus Exchange. All rights reserved.</p>
+  </footer>
+
+  <!-- Data and API -->
+  <script src="data.js"></script>
+  <script src="js/api.js"></script>
+
+  <script>
+    const grid = document.getElementById("grid");
+    const searchInput = document.getElementById("searchInput");
+
+    // Read category and search from URL
+    const params = new URLSearchParams(window.location.search);
+    const selectedCategory = params.get("category");
+    const navSearch = params.get("search");
+
+    let allItems = items || []; // Use local data directly
+    let filteredItems = [];
+
+    function loadItems() {
+      // Filter items by category if exists
+      filteredItems = selectedCategory
+        ? allItems.filter(item => item.category === selectedCategory)
+        : allItems;
+
+      // Filter by search if exists
+      if (navSearch) {
+        searchInput.value = navSearch;
+        const searchLower = navSearch.toLowerCase();
+        filteredItems = filteredItems.filter(item =>
+          item.name.toLowerCase().includes(searchLower) ||
+          item.category.toLowerCase().includes(searchLower) ||
+          item.description.toLowerCase().includes(searchLower)
+        );
+      }
+
+      displayItems(filteredItems);
+    }
+
+    const smartImageMap = {
+      // Electronics
+      'headphones': 'images/headphones.jpg',
+      'speaker': 'images/speaker.jpg',
+      'keyboard': 'images/key_board.jpg',
+      'mouse': 'images/mouse.jpg',
+      'laptop': 'images/laptop_stand.jpg',
+      'power bank': 'images/power_bank.jpg',
+      'smart watch': 'images/power_bank.jpg',
+      'phone': 'images/power_bank.jpg',
+      'usb': 'images/power_bank.jpg',
+      'fan': 'images/power_bank.jpg',
+      'clock': 'images/study_lamp.jpg',
+      'lamp': 'images/study_lamp.jpg',
+      'led': 'images/study_lamp.jpg',
+      
+      // Furniture
+      'chair': 'images/chair.jpg',
+      'table': 'images/drawer_table.jpg',
+      'desk': 'images/drawer_table.jpg',
+      'bed': 'images/drawer_table.jpg',
+      'shelf': 'images/drawer_table.jpg',
+      'rack': 'images/cloth_hanger.jpg',
+      'stand': 'images/laptop_stand.jpg',
+      'organizer': 'images/drawer_table.jpg',
+      
+      // Kitchen & Home
+      'bottle': 'images/water_bottle.jpg',
+      'flask': 'images/thermos_flask.jpg',
+      'kettle': 'images/kettle.jpg',
+      'mug': 'images/mug.jpg',
+      'bowl': 'images/bowl.jpg',
+      'bucket': 'images/bucket.jpg',
+      'iron': 'images/iron_box.jpg',
+      'lunch': 'images/lunch_box.jpg',
+      'thermos': 'images/thermos_flask.jpg',
+      
+      // Personal Items
+      'bag': 'images/lunch_box.jpg',
+      'backpack': 'images/lunch_box.jpg',
+      'wallet': 'images/mug.jpg',
+      'belt': 'images/cloth_hanger.jpg',
+      'tie': 'images/cloth_hanger.jpg',
+      'sunglasses': 'images/headphones.jpg',
+      'watch': 'images/power_bank.jpg',
+      'shoes': 'images/kettle.jpg',
+      'wristband': 'images/cloth_hanger.jpg',
+      'keychain': 'images/key_board.jpg',
+      'handbag': 'images/lunch_box.jpg',
+      
+      // Books & Study
+      'book': 'images/book.jpg',
+      'study': 'images/study_lamp.jpg',
+      'notes': 'images/book.jpg',
+      
+      // General fallbacks
+      'extension': 'images/extension_box.jpg',
+      'cable': 'images/extension_box.jpg',
+      'pad': 'images/mouse.jpg',
+      'pot': 'images/bowl.jpg',
+      'frame': 'images/drawer_table.jpg'
+    };
+
+    function getSmartImage(item) {
+      const name = item.name.toLowerCase();
+      const description = item.description.toLowerCase();
+      
+      // Check exact name matches first
+      for (const [keyword, imagePath] of Object.entries(smartImageMap)) {
+        if (name.includes(keyword)) {
+          return imagePath;
+        }
+      }
+      
+      // Check description matches
+      for (const [keyword, imagePath] of Object.entries(smartImageMap)) {
+        if (description.includes(keyword)) {
+          return imagePath;
+        }
+      }
+      
+      // Category-based fallbacks
+      const categoryFallbacks = {
+        'accessories': 'images/headphones.jpg',
+        'others': 'images/study_lamp.jpg',
+        'electronics': 'images/power_bank.jpg',
+        'furniture': 'images/chair.jpg',
+        'kitchen': 'images/mug.jpg'
+      };
+      
+      return categoryFallbacks[item.category] || 'images/book.jpg';
+    }
+
+    function formatIndianPrice(price) {
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0
+      }).format(price);
+    }
+
+    function imageExists(src) {
+      return true; // Simplified - all mapped images exist
+    }
+
+    function displayItems(list) {
+      grid.innerHTML = "";
+      if (!list || list.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #666;">No items found.</p>`;
+        return;
+      }
+
+      list.forEach(item => {
+        let imageSrc = item.image;
+        
+        // Use smart image mapping if current image doesn't exist or is generic
+        if (!imageExists(imageSrc) || !imageSrc || imageSrc.includes('placeholder')) {
+          imageSrc = getSmartImage(item);
+        }
+        
+        const div = document.createElement("div");
+        div.className = "item-card";
+        div.innerHTML = `
+          <img src="${imageSrc}" alt="${item.name}" onerror="this.src='images/book.jpg'">
+          <h3>${item.name}</h3>
+          <p class="price">${formatIndianPrice(item.sellingPrice)}</p>
+          <p class="original-price">${formatIndianPrice(item.originalPrice)}</p>
+          <p class="location">${item.location}</p>
+          <a href="item_details.html?id=${item.id}">View Details</a>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    // Search functionality
+    searchInput.addEventListener("input", () => {
+      const value = searchInput.value.toLowerCase();
+
+      const searched = filteredItems.filter(item =>
+        item.name.toLowerCase().includes(value) ||
+        item.category.toLowerCase().includes(value) ||
+        item.description.toLowerCase().includes(value)
+      );
+
+      displayItems(searched);
+    });
+
+    function openItem(id) {
+      window.location.href = "item_details.html?id=" + id;
+    }
+
+    // Load items on page load
+    document.addEventListener('DOMContentLoaded', loadItems);
+  </script>
+
+</body>
+</html>

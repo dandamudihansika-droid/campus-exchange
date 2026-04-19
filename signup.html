@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up | Campus Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="white">CAMPUS</span>
+      <span class="green">EXCHANGE</span>
+    </div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <!-- SIGNUP SECTION -->
+  <section class="form-container">
+    <h1>
+      SIGN <span class="green">UP</span>
+    </h1>
+    <p class="subtitle">
+      Join the Campus Exchange community
+    </p>
+
+    <form class="auth-form" onsubmit="registerUser(event)">
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email address" required>
+      <input type="tel" placeholder="Phone number" required>
+      <input type="password" placeholder="Create a secure password" required>
+
+      <button type="submit" class="primary-btn full-width">
+        CREATE ACCOUNT
+      </button>
+    </form>
+
+    <p class="switch-text">
+      Already have an account?
+      <a href="login.html">Sign In</a>
+    </p>
+  </section>
+
+  <!-- API -->
+  <script src="js/api.js"></script>
+
+  <script>
+    const signupForm = document.querySelector('.auth-form');
+
+    signupForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const submitBtn = signupForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      
+      try {
+        // Show loading state
+        submitBtn.textContent = 'Creating Account...';
+        submitBtn.disabled = true;
+
+        // Create FormData
+        const formData = new FormData(signupForm);
+        
+        // Validate form
+        const validation = CampusExchangeAPI.validateAuthForm(formData, false);
+        if (!validation.isValid) {
+          alert('Please fix the following errors:\n' + Object.values(validation.errors).join('\n'));
+          return;
+        }
+
+        // Prepare user data
+        const userData = {
+          fullName: formData.get('fullName'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          password: formData.get('password')
+        };
+
+        // Register to API
+        const result = await CampusExchangeAPI.authAPI.register(userData);
+
+        alert("Account created successfully!");
+        window.location.href = "login.html";
+        
+      } catch (error) {
+        console.error('Registration error:', error);
+        alert('Registration failed: ' + error.message);
+      } finally {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

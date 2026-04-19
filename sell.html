@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sell Item | Campus Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <span class="white">CAMPUS</span>
+    <span class="green">EXCHANGE</span>
+  </div>
+
+  <nav>
+    <a href="categories.html">Categories</a>
+    <a href="items.html">Items</a>
+    <a href="sell.html">Sell Item</a>
+  </nav>
+</header>
+
+<!-- SELL FORM -->
+<section class="form-container">
+  <h1>Sell an <span class="green">Item</span></h1>
+  <p class="subtitle">Fill details to list your item</p>
+
+  <form class="auth-form" id="sellForm">
+
+    <input type="text" id="name" placeholder="Item Name" required>
+
+    <textarea id="description" placeholder="Item Description" required></textarea>
+
+    <input type="number" id="sellingPrice" placeholder="Selling Price (₹)" required>
+    <input type="number" id="originalPrice" placeholder="Original Price (₹)" required>
+
+    <select id="category" required>
+      <option value="">Select Category</option>
+      <option value="electronics">Electronics</option>
+      <option value="books">Books</option>
+      <option value="furniture">Furniture</option>
+      <option value="daily">Daily Essentials</option>
+      <option value="others">Others</option>
+    </select>
+
+    <input type="text" id="condition" placeholder="Condition (New / Used / Good)" required>
+    <input type="number" id="yearsUsed" placeholder="Years Used" required>
+    <input type="number" id="yearBought" placeholder="Year Bought" required>
+
+    <input type="text" id="sellerName" placeholder="Your Name" required>
+    <input type="tel" id="contact" placeholder="Phone Number" required>
+    <input type="text" id="location" placeholder="Location" required>
+
+    <input type="file" id="image" accept="image/*" required>
+
+    <button type="submit" class="primary-btn full-width">
+      Submit Item
+    </button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Campus Exchange. All rights reserved.</p>
+</footer>
+
+<!-- API -->
+  <script src="js/api.js"></script>
+
+  <script>
+    const form = document.getElementById("sellForm");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      
+      try {
+        // Show loading state
+        submitBtn.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+
+        // Create FormData
+        const formData = new FormData(form);
+        
+        // Validate form
+        const validation = CampusExchangeAPI.validateItemForm(formData);
+        if (!validation.isValid) {
+          alert('Please fix the following errors:\n' + Object.values(validation.errors).join('\n'));
+          return;
+        }
+
+        // Submit to API
+        const result = await CampusExchangeAPI.itemsAPI.create(formData);
+
+        alert("Item added successfully!");
+        window.location.href = "items.html";
+        
+      } catch (error) {
+        console.error('Error submitting item:', error);
+        alert('Error submitting item: ' + error.message);
+      } finally {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

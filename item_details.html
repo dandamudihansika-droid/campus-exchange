@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Item Details | Campus Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ITEM DETAILS PAGE ONLY */
+    .details-section {
+      padding: 60px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .details-card {
+      background: #0f1411;
+      border: 1px solid #1c1c1c;
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .details-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      background: #111;
+    }
+
+    .details-card h2 {
+      color: #00ff66;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .details-card h3 {
+      color: #00ff66;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .details-card p {
+      font-size: 14px;
+      color: #bfbfbf;
+      margin: 6px 0;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 18px;
+      color: #00ff66;
+      text-decoration: none;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="white">CAMPUS</span>
+      <span class="green">EXCHANGE</span>
+    </a>
+
+    <nav>
+      <a href="categories.html">Categories</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- DETAILS SECTION -->
+  <section class="details-section">
+    <div class="details-card" id="box"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p> 2026 Campus Exchange. All rights reserved.</p>
+  </footer>
+
+  <!-- Data -->
+  <script src="data.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get("id"));
+    const box = document.getElementById("box");
+
+    // Smart image mapping based on product names and descriptions
+    const smartImageMap = {
+      // Electronics
+      'headphones': 'images/headphones.jpg',
+      'speaker': 'images/speaker.jpg',
+      'keyboard': 'images/key_board.jpg',
+      'mouse': 'images/mouse.jpg',
+      'laptop': 'images/laptop_stand.jpg',
+      'power bank': 'images/power_bank.jpg',
+      'smart watch': 'images/power_bank.jpg',
+      'phone': 'images/power_bank.jpg',
+      'usb': 'images/power_bank.jpg',
+      'fan': 'images/power_bank.jpg',
+      'clock': 'images/study_lamp.jpg',
+      'lamp': 'images/study_lamp.jpg',
+      'led': 'images/study_lamp.jpg',
+      
+      // Furniture
+      'chair': 'images/chair.jpg',
+      'table': 'images/drawer_table.jpg',
+      'desk': 'images/drawer_table.jpg',
+      'bed': 'images/drawer_table.jpg',
+      'shelf': 'images/drawer_table.jpg',
+      'rack': 'images/cloth_hanger.jpg',
+      'stand': 'images/laptop_stand.jpg',
+      'organizer': 'images/drawer_table.jpg',
+      
+      // Kitchen & Home
+      'bottle': 'images/water_bottle.jpg',
+      'flask': 'images/thermos_flask.jpg',
+      'kettle': 'images/kettle.jpg',
+      'mug': 'images/mug.jpg',
+      'bowl': 'images/bowl.jpg',
+      'bucket': 'images/bucket.jpg',
+      'iron': 'images/iron_box.jpg',
+      'lunch': 'images/lunch_box.jpg',
+      'thermos': 'images/thermos_flask.jpg',
+      
+      // Personal Items
+      'bag': 'images/lunch_box.jpg',
+      'backpack': 'images/lunch_box.jpg',
+      'wallet': 'images/mug.jpg',
+      'belt': 'images/cloth_hanger.jpg',
+      'tie': 'images/cloth_hanger.jpg',
+      'sunglasses': 'images/headphones.jpg',
+      'watch': 'images/power_bank.jpg',
+      'shoes': 'images/kettle.jpg',
+      'wristband': 'images/cloth_hanger.jpg',
+      'keychain': 'images/key_board.jpg',
+      'handbag': 'images/lunch_box.jpg',
+      
+      // Books & Study
+      'book': 'images/book.jpg',
+      'study': 'images/study_lamp.jpg',
+      'notes': 'images/book.jpg',
+      
+      // General fallbacks
+      'extension': 'images/extension_box.jpg',
+      'cable': 'images/extension_box.jpg',
+      'pad': 'images/mouse.jpg',
+      'pot': 'images/bowl.jpg',
+      'frame': 'images/drawer_table.jpg'
+    };
+
+    function getSmartImage(item) {
+      const name = item.name.toLowerCase();
+      const description = item.description.toLowerCase();
+      
+      // Check exact name matches first
+      for (const [keyword, imagePath] of Object.entries(smartImageMap)) {
+        if (name.includes(keyword)) {
+          return imagePath;
+        }
+      }
+      
+      // Check description matches
+      for (const [keyword, imagePath] of Object.entries(smartImageMap)) {
+        if (description.includes(keyword)) {
+          return imagePath;
+        }
+      }
+      
+      // Category-based fallbacks
+      const categoryFallbacks = {
+        'accessories': 'images/headphones.jpg',
+        'others': 'images/study_lamp.jpg',
+        'electronics': 'images/power_bank.jpg',
+        'furniture': 'images/chair.jpg',
+        'kitchen': 'images/mug.jpg'
+      };
+      
+      return categoryFallbacks[item.category] || 'images/book.jpg';
+    }
+
+    function formatIndianPrice(price) {
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0
+      }).format(price);
+    }
+
+    function loadItemDetails() {
+      const item = items.find(i => i.id === id);
+
+      if (!item) {
+        box.innerHTML = `
+          <h2>Item Not Found</h2>
+          <p>The item you're looking for doesn't exist.</p>
+          <a class="back-link" href="items.html"><- Back to Items</a>
+        `;
+        return;
+      }
+
+      // Build specs dynamically
+      let specsHTML = "";
+      if (item.specs) {
+        for (let key in item.specs) {
+          specsHTML += `<p><b>${key}:</b> ${item.specs[key]}</p>`;
+        }
+      }
+
+      // Use smart image mapping
+      let imageSrc = item.image;
+      if (!imageSrc || imageSrc.includes('placeholder')) {
+        imageSrc = getSmartImage(item);
+      }
+
+      box.innerHTML = `
+        <img src="${imageSrc}" onerror="this.src='images/book.jpg'">
+        <h2>${item.name}</h2>
+
+        <p><b>Category:</b> ${item.category}</p>
+        <p><b>Description:</b> ${item.description}</p>
+
+        <h3>Product Details</h3>
+        ${specsHTML}
+
+        <h3>Pricing & Usage</h3>
+        <p><b>Original Price:</b> ${formatIndianPrice(item.originalPrice)}</p>
+        <p><b>Selling Price:</b> ${formatIndianPrice(item.sellingPrice)}</p>
+        <p><b>Condition:</b> ${item.condition}</p>
+        <p><b>Years Used:</b> ${item.yearsUsed}</p>
+        <p><b>Year Bought:</b> ${item.yearBought}</p>
+
+        <h3>Seller Information</h3>
+        <p><b>Seller Name:</b> ${item.sellerName}</p>
+        <p><b>Contact Number:</b> ${item.contact}</p>
+        <p><b>Location:</b> ${item.location}</p>
+
+        <h3>Status</h3>
+        <p><b>Availability:</b> ${item.available ? "Available" : "Sold"}</p>
+        <p><b>Date Added:</b> ${new Date(item.dateAdded).toLocaleDateString('en-IN')}</p>
+
+        <a class="back-link" href="items.html"><- Back to Items</a>
+      `;
+    }
+
+    // Load item details on page load
+    document.addEventListener('DOMContentLoaded', loadItemDetails);
+  </script>
+
+</body>
+</html>
